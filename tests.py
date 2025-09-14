@@ -104,3 +104,35 @@ class TestBooksCollector:
             collector.delete_book_from_favorites("Книга1")
             favorites = collector.get_list_of_favorites_books()
             assert "Книга1" not in favorites, "Удалённая книга не должна присутствовать в избранном."
+
+        def test_get_book_genre(self, collector):
+            collector._books = {"Книга1": None}
+            collector._genres = {"Книга1": "Фантастика"}
+            genre = collector.get_book_genre("Книга1")
+            assert genre == "Фантастика", "Метод get_book_genre возвращает неправильный жанр."
+        
+        def test_get_books_genre(self, collector):
+            collector._books = {
+                "Книга1": None,
+                "Книга2": None,
+                "Книга3": None
+            }
+            collector._genres = {
+                "Книга1": "Фантастика",
+                "Книга2": "Роман",
+                "Книга3": "Исторический роман"
+            }
+            
+            books_with_genres = collector.get_books_genre()
+            expected_result = {
+                "Книга1": "Фантастика",
+                "Книга2": "Роман",
+                "Книга3": "Исторический роман"
+            }
+            assert books_with_genres == expected_result, "Метод get_books_genre вернул некорректный список книг с жанрами."
+        
+        def test_get_list_of_favorites_books(self, collector):
+            collector._favorites = ["Книга1", "Книга3"]
+            favorite_books = collector.get_list_of_favorites_books()
+            expected_result = ["Книга1", "Книга3"]
+            assert sorted(favorite_books) == sorted(expected_result), "Метод get_list_of_favorites_books вернул некорректный список любимых книг."
